@@ -1,0 +1,10 @@
+
+pandas
+pyarrow
+sentence-transformers
+scikit-learn
+hdbscan
+umap-learn
+matplotlib
+streamlit
+kaggle
