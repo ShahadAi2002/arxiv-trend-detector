@@ -14,11 +14,12 @@ def paper_matches_filters(paper):
     if not categories.intersection(CATEGORIES_TO_KEEP):
         return False
 
-    # Check 2: year
-    update_date = paper.get("update_date", "")
-    if not update_date:
+    
+    # Check 2: year 
+    versions = paper.get("versions", [])
+    if not versions:
         return False
-    year = int(update_date.split("-")[0])
+    year = int(versions[0]["created"].split()[3])
     if year not in YEARS_TO_KEEP:
         return False
 
@@ -36,7 +37,7 @@ with open(RAW_PATH, "r") as f:
     for line in f:
         paper = json.loads(line)
         if paper_matches_filters(paper):
-            year = int(paper["update_date"].split("-")[0])
+            year = int(paper["versions"][0]["created"].split()[3])
             records.append({
                 "id": paper.get("id"),
                 "title": paper.get("title", "").strip().replace("\n", " "),
@@ -48,4 +49,4 @@ with open(RAW_PATH, "r") as f:
 df = pd.DataFrame(records)
 
 df.to_parquet("data/processed/arxiv_filtered.parquet", index=False)
-print("Saved to data/processed/arxiv_filtered.parquet")
+print("Saved to data/processed/arxiv_filtered.parquet") 
